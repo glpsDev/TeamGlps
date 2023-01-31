@@ -58,11 +58,12 @@ function Login(props) {
 
 		handleToggle()
 
+		
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
-				"username": inputs.username,
+				"userID": inputs.username,
 				"password": inputs.password
 			})
 		};
