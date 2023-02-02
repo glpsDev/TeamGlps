@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState, useEffect, useHistory, useRef } from "react";
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -20,69 +19,35 @@ import Button from '@mui/material/Button';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { fetchUrl } from '../Config';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPen, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
 
 const baseURL = fetchUrl;
 
-const UserMasterSearchURL = '/searchUser';
-const addUserMasterURL = '/saveUser';
-const EditUserMaster = '/editUser'
-const statusListURL = '/statusList';
-const fetchBranchdetailURL = '/fetchBranchdetail';
-const fetchRoleURL = '/fetchRole';
+const UserMasterSearchURL = '/search';
+const addUserMasterURL = '/addMeetingMaster';
 
 const columns = [
-
+    { id: 'Sr', label: 'Sr', },
     { id: ' User ID', label: ' User ID' },
-    { id: 'User Name', label: 'User Name' },
+    { id: 'Employee Name', label: 'Employee Name' },
     { id: 'Role', label: 'Role', },
-    { id: 'Branch', label: 'Branch' },
-    { id: 'Ldap Flag', label: 'Ldap Flag', },
-    { id: 'Status', label: 'Status', },
-    { id: 'Action', label: 'Action', }
+    { id: 'Branch Code', label: 'Branch Code' },
+    { id: 'Ldap', label: 'Ldap', },
+    { id: 'Status', label: 'Status', }
 ];
 function FTPuserMaster() {
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [FTP, setFtp] = React.useState([]);
     const [open, setOpen] = React.useState(false);
     const [search, setSearch] = React.useState([]);
     const [addDetails, setAddDetails] = React.useState([]);
     const [editInputes, setEditInputes] = React.useState([]);
     const [searchInputes, setSearchInputs] = React.useState([]);
-    const [userId, setUserId] = React.useState([]);
+    
     const [Roledropdown, setRoledropdown] = React.useState('');
     const [Branchdropdown, setBranchDropdown] = React.useState('');
     const [Disable_Userdropdown, setDisable_Userdropdown] = React.useState('');
     const [Ldapdropdown, setLDAPdropdown] = React.useState('');
-    const [Statusdropdown, setStatusdropdown] = React.useState('');
-    const [statusList, setstatusList] = React.useState([]);
-    const USER_ID = React.useRef();
-    const USER_NAME = React.useRef();
-    const EMAIL_ID = React.useRef();
-    const MOBILE_NO = React.useRef();
-    const EMPLOYEE_NO = React.useRef();
-    const VALID_UPTO = React.useRef();
-    const ROLE = React.useRef();
-    const GROUP_ACCESS = React.useRef();
-    const DISABLE_FLAG = React.useRef();
-    const LDAP_FLAG = React.useRef();
-    const BRANCH = React.useRef();
-    const STATUS = React.useRef();
-    const [disableBranch, setdisableBranch] = React.useState(false);
-    const [userName, setUserName] = React.useState([])
-    const [groupId, setGroupId] = React.useState([])
-    const [userActiveFlag, setUserActiveFlag] = React.useState([])
-    const [emailID, setEmail] = React.useState([])
-    const [mobileNO, setMobileNo] = React.useState([])
-    const [ValidUpto, setValidUpto] = React.useState([])
-    const [EmployeeNo, setEmployeeNo] = React.useState([])
-    const [GroupAccess, setGroupAccess] = React.useState([])
-    const [branchlist, setBranchlist] = React.useState([])
-    const [rolelist, setROlelist] = React.useState([])
-
 
     const handleClose = () => {
         setOpen(false);
@@ -95,64 +60,11 @@ function FTPuserMaster() {
     const handleCurrentFTP = async (event) => {
         event.preventDefault();
     }
-    const handleAddRoleSelect = (event) => {
-        setRoledropdown(event.target.value)
-        if (Roledropdown == "Branch") {
-            setdisableBranch(true)
-        }
-    }
 
-    const UserMasterview = (userId, userName, Roledropdown, groupId, Ldapdropdown, userActiveFlag, emailID, mobileNO, employeeNO, validUpTo, GroupAccess, Disable_Userdropdown) => () => {
-        setUserId(userId);
-        setUserName(userName);
-        setRoledropdown(Roledropdown);
-        setGroupId(groupId);
-        setLDAPdropdown(Ldapdropdown);
-        setUserActiveFlag(userActiveFlag);
-        setEmail(emailID);
-        setMobileNo(mobileNO);
-        setValidUpto(validUpTo);
-        setGroupAccess(GroupAccess);
-        setEmployeeNo(employeeNO);
-        setDisable_Userdropdown(Disable_Userdropdown);
-        setStatusdropdown(Statusdropdown);
-    }
-    const UserMasterEdit = (userId, userName, Roledropdown, groupId, Ldapdropdown, userActiveFlag, emailID, mobileNO, employeeNO, validUpTo, GroupAccess, Disable_Userdropdown) => () => {
-        setUserId(userId)
-        setUserName(userName);
-        setRoledropdown(Roledropdown);
-        setGroupId(groupId);
-        setLDAPdropdown(Ldapdropdown);
-        setUserActiveFlag(userActiveFlag);
-        setEmail(emailID);
-        setMobileNo(mobileNO);
-        setValidUpto(validUpTo);
-        setGroupAccess(GroupAccess);
-        setEmployeeNo(employeeNO);
-        setDisable_Userdropdown(Disable_Userdropdown);
-        setStatusdropdown(Statusdropdown);
-
-    }
-    const handleAddBranchSelect = (event) => {
-        setBranchDropdown(event.target.value)
-
-    }
-    const handleAddLdapSelect = (event) => {
-        setLDAPdropdown(event.target.value)
-    }
-    const handleAddDisable_userSelect = (event) => {
-        setDisable_Userdropdown(event.target.value)
-    }
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-    const handleAddStatusSelect = (event) => {
-        setStatusdropdown(event.target.value)
-    }
     const Navigate = useNavigate()
     const location = useLocation();
     const index = location.state;
@@ -164,27 +76,19 @@ function FTPuserMaster() {
         const value = event.target.value;
         setAddDetails(values => ({ ...values, [name]: value }))
     }
-    const onHandlechange = (event) => {
+    const onHandleSearchUserMaster = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setSearchInputs(values => ({ ...values, [name]: value }))
     }
-    const handleEditInputs = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setEditInputes(values => ({ ...values, [name]: value }))
-
-    }
-
-    const onHandleSearchUserMaster = async (event) => {
-
+    const onHandleUerMaster = async (event) => {
+    
         event.preventDefault();
         const requestOptionssearch = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "userId": searchInputes.UserID,
-                "userName": searchInputes.User_Name,
+          
 
             }),
         };
@@ -193,213 +97,102 @@ function FTPuserMaster() {
             .then((response) => {
                 console.log(response)
                 setSearch(response);
-
+            
             })
     }
-    useEffect(() => {
-        const requestOptionsid = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-            }),
-        };
-        fetch(baseURL + statusListURL, requestOptionsid)
-            .then(response => response.json())
-            .then((response) => {
-                setstatusList(response)
-                handleClose()
-            })
-
-    }, []);
-    const statusListArray = Object.values(statusList);
-
     const onHandelAddUserMaster = async (event) => {
+
         event.preventDefault();
 
-        // if (addDetails.UserID === "" || addDetails.UserID === null || addDetails.UserID === undefined) {
-        //     event.preventDefault();
+        if (addDetails.UserID== "" || addDetails.UserID == null || addDetails.UserID == undefined) {
+            event.preventDefault();
 
-        //     alert("Please Enter User ID ")
-        //     return;
-        // }
-        // if (addDetails.User_Name == "" || addDetails.User_Name == null || addDetails.User_Name == undefined) {
-        //     event.preventDefault();
+            alert("Please Enter User ID ")
+            return;
+        }
+        if (addDetails.User_Name== "" || addDetails.User_Name == null || addDetails.User_Name == undefined) {
+            event.preventDefault();
 
-        //     alert("Please Enter User Name ")
-        //     return;
-        // }
-        // if (addDetails.Email_ID == "" || addDetails.Email_ID == null || addDetails.Email_ID == undefined) {
-        //     event.preventDefault();
+            alert("Please Enter User Name ")
+            return;
+        }
+        if (addDetails.Email_ID== "" || addDetails.Email_ID == null || addDetails.Email_ID == undefined) {
+            event.preventDefault();
 
-        //     alert("Please Enter Email ID ")
-        //     return;
-        // }
-        // if (addDetails.Mobile_No == "" || addDetails.Mobile_No == null || addDetails.Mobile_No == undefined) {
-        //     event.preventDefault();
+            alert("Please Enter Email ID ")
+            return;
+        }
+        if (addDetails.Mobile_No== "" || addDetails.Mobile_No == null || addDetails.Mobile_No == undefined) {
+            event.preventDefault();
 
-        //     alert("Please Enter Mobile No ")
-        //     return;
-        // }
-        // if (addDetails.Employee_No == "" || addDetails.Employee_No == null || addDetails.Employee_No == undefined) {
-        //     event.preventDefault();
+            alert("Please Enter Mobile No ")
+            return;
+        }
+        if (addDetails.Employee_No== "" || addDetails.Employee_No == null || addDetails.Employee_No == undefined) {
+            event.preventDefault();
 
-        //     alert("Please Enter Employee No ")
-        //     return;
-        // }
-        // if (addDetails.Valid_Upto == "" || addDetails.Valid_Upto == null || addDetails.Valid_Upto == undefined) {
-        //     event.preventDefault();
+            alert("Please Enter Employee No ")
+            return;
+        }
+        if (addDetails.Valid_Upto== "" || addDetails.Valid_Upto == null || addDetails.Valid_Upto == undefined) {
+            event.preventDefault();
 
-        //     alert("Please Enter Date ")
-        //     return;
-        // }
-        // if (addDetails.Group_Access == "" || addDetails.Group_Access == null || addDetails.Group_Access == undefined) {
-        //     event.preventDefault();
+            alert("Please Enter Date ")
+            return;
+        }
+        if (addDetails.Group_Access== "" || addDetails.Group_Access == null || addDetails.Group_Access == undefined) {
+            event.preventDefault();
 
-        //     alert("Please Enter Group Access ")
-        //     return;
-        // }
-        // if (Roledropdown == "" || Roledropdown == null || Roledropdown == undefined) {
-        //     event.preventDefault();
+            alert("Please Enter Group Access ")
+            return;
+        }
+        if (Roledropdown == "" || Roledropdown == null || Roledropdown == undefined) {
+            event.preventDefault();
 
-        //     alert("Please Enter Role ")
-        //     return;
-        // }
+            alert("Please Enter Role ")
+            return;
+        }
+       
+        if (Branchdropdown == "" || Branchdropdown == null || Branchdropdown == undefined) {
+            event.preventDefault();
 
-        // if (Branchdropdown == "" || Branchdropdown == null || Branchdropdown == undefined) {
-        //     event.preventDefault();
+            alert("Please Enter Branch  ")
+            return;
+        }
+        if (Disable_Userdropdown == "" || Disable_Userdropdown == null || Disable_Userdropdown == undefined) {
+            event.preventDefault();
 
-        //     alert("Please Enter Branch  ")
-        //     return;
-        // }
-        // if (Disable_Userdropdown == "" || Disable_Userdropdown == null || Disable_Userdropdown == undefined) {
-        //     event.preventDefault();
+            alert("Please EnterDisable User ")
+            return;
+        }
+        if (Ldapdropdown == "" || Ldapdropdown == null || Ldapdropdown == undefined) {
+            event.preventDefault();
 
-        //     alert("Please EnterDisable User ")
-        //     return;
-        // }
-        // if (Ldapdropdown == "" || Ldapdropdown == null || Ldapdropdown == undefined) {
-        //     event.preventDefault();
-
-        //     alert("Please Enter Ldap ")
-        //     return;
-        // }
-        // if (Statusdropdown == "" || Statusdropdown == null || Statusdropdown == undefined) {
-        //     event.preventDefault();
-
-        //     alert("Please Enter Status ")
-        //     return;
-        // }
-
+            alert("Please Enter Ldap ")
+            return;
+        }
         const requestOptionsadd = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "userId": addDetails.UserID,
-                "username": addDetails.UserName,
-                "password": "password",
-                "mobileNO": addDetails.MobileNo,
-                "emailID": addDetails.EmailID,
-                "status": "",
-                "employeeNO": addDetails.EmployeeNo,
-                "validUpTo": addDetails.ValidUpto,
-                "userDisableFlag": Disable_Userdropdown,
-                "userLDAPFlag": Ldapdropdown,
-                "allBranchesAccess": "O"
-
+            
             }),
         };
         await fetch(baseURL + addUserMasterURL, requestOptionsadd)
             .then(response => response.json())
             .then((response) => {
-
+             
                 alert(response.Success);
-                // setAddDetails("");
+                setAddDetails("");
                 setBranchDropdown("");
                 setDisable_Userdropdown("");
                 setLDAPdropdown("");
-                setRoledropdown("");
-                setStatusdropdown("");
-            })
-
-    }
-
-    const onHandelEditUserMaster = async (event) => {
-        event.preventDefault();
-        if (editInputes.User_Name == null) {
-            editInputes.User_Name = userName
-        }
-        if (editInputes.Mobile_No == null) {
-            editInputes.Mobile_No = mobileNO
-        }
-        if (editInputes.Email_ID == null) {
-            editInputes.Email_ID = emailID
-        }
-        if (editInputes.Valid_Upto == null) {
-            editInputes.Valid_Upto = ValidUpto
-        }
-        const requestOptionsedit = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "userId": userId,
-                "username": editInputes.User_Name,
-                "mobileNO": editInputes.Mobile_No,
-                "emailID": editInputes.Email_ID,
-                "status": Statusdropdown,
-                "employeeNO": EmployeeNo,
-                "validUpTo": editInputes.Valid_Upto,
-                "userDisableFlag": Disable_Userdropdown,
-                "userLDAPFlag": Ldapdropdown,
-                "allBranchesAccess": "O"
-            }),
-        };
-        await fetch(baseURL + EditUserMaster, requestOptionsedit)
-            .then(response => response.json())
-            .then((response) => {
-                alert(response.Success)
-                setBranchDropdown("");
-                setDisable_Userdropdown("");
-                setLDAPdropdown("");
-                setRoledropdown("");
-                setStatusdropdown("");
-                setEditInputes('');
-                handleClose()
+                setRoledropdown("")
+              
             })
     }
-
-    useEffect(() => {
-        const requestOptionsedit = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-
-            }),
-        };
-        fetch(baseURL + fetchBranchdetailURL, requestOptionsedit)
-            .then(response => response.json())
-            .then((response) => {
-                setBranchlist(response);
-            })
-    }, [])
-    const BranchList = Object.values(branchlist);
-
-    useEffect(() => {
-        const requestOptionsedit = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-
-            }),
-        };
-        fetch(baseURL + fetchRoleURL, requestOptionsedit)
-            .then(response => response.json())
-            .then((response) => {
-                setROlelist(response);
-            })
-    }, []);
-
-    const RoleList = Object.values(rolelist);
-
+    
+    
     return (
         <>
             <div className='usermaster mt-5'>
@@ -407,29 +200,28 @@ function FTPuserMaster() {
                     <div className="card">
                         <div className="card-header">User Master </div>
                         <form onSubmit={onHandleSearchUserMaster}>
-                            <div className="card-body py-4">
-                                <div className='row'>
-                                    <div className='col-5'>
-                                        <TextField fullWidth id="outlined-basic" label=" User ID" variant="outlined"
-                                            name='UserID'
-                                            value={searchInputes.UserID}
-                                            onChange={onHandlechange}
-                                        />
-                                    </div>
-                                    <div className='col-5'>
-                                        <TextField fullWidth id="outlined-basic" label="User Name" variant="outlined"
-                                            name='User_Name'
-                                            value={searchInputes.User_Name}
-                                            onChange={onHandlechange}
-                                        />
-                                    </div>
-
-                                    <div className='col-2 d-flex align-item-center p-1'>
-                                        <Button className='bg-orenge ms-3' variant="contained" type="submit"
-                                        >Search</Button>
-                                    </div>
+                        <div className="card-body py-4">
+                            <div className='row'>
+                                <div className='col-5'>
+                                    <TextField fullWidth id="outlined-basic" label="Employee Name" variant="outlined"
+                                        name='Employee_Name'
+                                        value={searchInputes.Employee_Name}
+                                        onChange={onHandleSearchUserMaster}
+                                    />
+                                </div>
+                                <div className='col-5'>
+                                    <TextField fullWidth id="outlined-basic" label=" User ID" variant="outlined"
+                                        name='UserID'
+                                        value={searchInputes.UserID}
+                                        onChange={onHandleSearchUserMaster}
+                                    />
+                                </div>
+                                <div className='col-2 d-flex align-item-center p-1'>
+                                    <Button className='bg-orenge ms-3' variant="contained" type="submit"
+                                    >Search</Button>
                                 </div>
                             </div>
+                        </div>
                         </form>
                     </div>
                 </div>
@@ -459,35 +251,17 @@ function FTPuserMaster() {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {search
+                                            {FTP
                                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                                 .map((row, index) => {
                                                     return (
                                                         <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                                                            <TableCell >{row.userId}</TableCell>
-                                                            <TableCell >{row.userName}</TableCell>
-                                                            <TableCell >{row.groupId}</TableCell>
-                                                            <TableCell >{row.branchCode}</TableCell>
-                                                            <TableCell >{row.userLDAPFlag}</TableCell>
-                                                            <TableCell >{row.status}</TableCell>
-                                                            <TableCell sx={{ display: "none" }}>{row.emailID}</TableCell>
-                                                            <TableCell sx={{ display: "none" }}>{row.mobileNO}</TableCell>
-                                                            <TableCell sx={{ display: "none" }}>{row.employeeNO}</TableCell>
-                                                            <TableCell sx={{ display: "none" }}>{row.validUpTo}</TableCell>                                                            <TableCell sx={{ display: "none" }}>{row.employeeNO}</TableCell>
-                                                            <TableCell sx={{ display: "none" }}>{row.GroupAccess}</TableCell>                                                            <TableCell sx={{ display: "none" }}>{row.Roledropdown}</TableCell>
-                                                            <TableCell sx={{ display: "none" }}>{row.Disable_Userdropdown}</TableCell>
-                                                            <TableCell sx={{ display: "none" }}>{row.Statusdropdown}</TableCell>
-
-                                                            <TableCell  >
-                                                                <FontAwesomeIcon className='me-3 fs-5 text-orenge cursor-pointer' data-bs-toggle="modal"
-                                                                    data-bs-target="#ViewMeetingmaster" variant="contained" icon={faEye}
-                                                                    onClick={UserMasterview(row.userId, row.userName, row.userRoleId, row.groupId, row.Ldapdropdown, row.userActiveFlag, row.emailID, row.mobileNO, row.employeeNO, row.validUpTo, row.GroupAccess, row.Disable_Userdropdown, row.Statusdropdown)}
-                                                                />
-                                                                <FontAwesomeIcon className='me-3 fs-5 text-orenge cursor-pointer'
-                                                                    data-bs-toggle="modal" data-bs-target="#EditMeetingmaster" variant="contained"
-                                                                    onClick={UserMasterEdit(row.userId, row.userName, row.userRoleId, row.groupId, row.Ldapdropdown, row.userActiveFlag, row.emailID, row.mobileNO, row.employeeNO, row.validUpTo, row.GroupAccess, row.Disable_Userdropdown, row.Statusdropdown)}
-                                                                    icon={faPenToSquare} />
-                                                            </TableCell>
+                                                            <TableCell >{index + 1}</TableCell>
+                                                            <TableCell >{row.Shekhar}</TableCell>
+                                                            <TableCell >{row.Shekhar}</TableCell>
+                                                            <TableCell >{row.Shekhar}</TableCell>
+                                                            <TableCell >{row.Shekhar}</TableCell>
+                                                            <TableCell >{row.Shekhar}</TableCell>
                                                         </TableRow>
                                                     );
                                                 })}
@@ -495,12 +269,11 @@ function FTPuserMaster() {
                                     </Table>
                                 </TableContainer>
                                 <TablePagination
-                                    rowsPerPageOptions={[3, 5, 10, 25, 100]}
+                                    rowsPerPageOptions={[10, 25, 100]}
                                     component="div"
-                                    count={search.length}
+                                    count={FTP.length}
                                     rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={handleChangePage}
+                                    page={page} 
                                     onRowsPerPageChange={handleChangeRowsPerPage}
                                 />
                                 <Backdrop
@@ -511,7 +284,7 @@ function FTPuserMaster() {
                                 </Backdrop>
                             </Paper>
                         </div>
-
+                       
                     </div>
                 </div>
             </div>
@@ -525,12 +298,12 @@ function FTPuserMaster() {
                         <form onSubmit={onHandelAddUserMaster} >
                             <div className="modal-body">
                                 <div className='row g-3'>
-                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="UserID" variant="outlined" autoComplete='off' name="UserID" value={addDetails.UserID} onChange={handleAddInputs} /></div>
-                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="UserName" variant="outlined" autoComplete='off' name="UserName" value={addDetails.UserName} onChange={handleAddInputs} /></div>
-                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="Email ID " variant="outlined" autoComplete='off' name="EmailID" value={addDetails.EmailID} onChange={handleAddInputs} /></div>
-                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="Mobile No" variant="outlined" autoComplete='off' name="MobileNo" value={addDetails.MobileNo} onChange={handleAddInputs} /></div>
-                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="Employee No" variant="outlined" autoComplete='off' name="EmployeeNo" value={addDetails.EmployeeNo} onChange={handleAddInputs} /></div>
-                                    <div className='col-6'><TextField type="date" fullWidth id="outlined-basic" label="Valid Upto" variant="outlined" autoComplete='off' name="ValidUpto" value={addDetails.ValidUpto} onChange={handleAddInputs} ></TextField></div>
+                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="UserID" variant="outlined" autoComplete='off' name="UserID" value={addDetails.UserID || ""} onChange={handleAddInputs} /></div>
+                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="UserName" variant="outlined" autoComplete='off' name="User_Name" value={addDetails.User_Name || ""} onChange={handleAddInputs} /></div>
+                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="Email ID " variant="outlined" autoComplete='off' name="Email_ID" value={addDetails.Email_ID || ""} onChange={handleAddInputs} /></div>
+                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="Mobile No" variant="outlined" autoComplete='off' name="Mobile_No" value={addDetails.Mobile_No || ""} onChange={handleAddInputs} /></div>
+                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="Employee No" variant="outlined" autoComplete='off' name="Employee_No" value={addDetails.Employee_No || ""} onChange={handleAddInputs} /></div>
+                                    <div className='col-6'><TextField fullWidth type="date" id="outlined-basic"  variant="outlined" autoComplete='off' name="Valid_Upto" value={addDetails.Valid_Upto|| ""} onChange={handleAddInputs} /></div>
                                     <div className='col-6'>
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">Role</InputLabel>
@@ -540,34 +313,26 @@ function FTPuserMaster() {
                                                 name="Role"
                                                 value={Roledropdown}
                                                 label="Role"
-                                                onChange={handleAddRoleSelect}
+                                                onChange=''
                                             >
-                                                {RoleList.map((value, index) => {
-                                                    return (
-                                                        <MenuItem key={index} value={value}>
-                                                            {value}
-                                                        </MenuItem>
-                                                    )
-                                                })}
-
-
+                                                <MenuItem value="......">------Select------</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </div>
-                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="Group Access" variant="outlined" autoComplete='off' name="Group_Access" value={addDetails.Group_Access || ""} onChange={handleAddInputs} /></div>
+                                    <div className='col-6'><TextField fullWidth id="outlined-basic" label="Group Access" variant="outlined" autoComplete='off' name="Group_Access" value={addDetails.Group_Access|| ""} onChange={handleAddInputs} /></div>
                                     <div className='col-6'>
                                         <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">Disable Flag</InputLabel>
+                                            <InputLabel id="demo-simple-select-label">Disable_User</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
                                                 name="Disable_User"
                                                 value={Disable_Userdropdown}
                                                 label="Disable_User"
-                                                onChange={handleAddDisable_userSelect}
+                                                onChange='handleAddInputs'
                                             >
-                                                <MenuItem value="yes" >Y</MenuItem>
-                                                <MenuItem value="no">N</MenuItem>
+                                                <MenuItem value="......">YES</MenuItem>
+                                                <MenuItem value="......">NO</MenuItem>
 
 
                                             </Select>
@@ -575,17 +340,17 @@ function FTPuserMaster() {
                                     </div>
                                     <div className='col-6'>
                                         <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">LDAP Flag</InputLabel>
+                                            <InputLabel id="demo-simple-select-label">LDAP</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                name="LDAP Flag"
+                                                name="LDAP"
                                                 value={Ldapdropdown}
-                                                label="LDAP Flag"
-                                                onChange={handleAddLdapSelect}
+                                                label="LDAP"
+                                                onChange=''
                                             >
-                                                <MenuItem value="YES">Y</MenuItem>
-                                                <MenuItem value="no" >N</MenuItem>
+                                                <MenuItem value="YES">YES</MenuItem>
+                                                <MenuItem value="YES">NO</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </div>
@@ -598,33 +363,10 @@ function FTPuserMaster() {
                                                 name="Branch"
                                                 value={Branchdropdown}
                                                 label="Branch"
-                                                onChange={handleAddBranchSelect}
-                                                disabled={disableBranch ? true : false}
+                                                onChange=''
                                             >
-                                                {BranchList.map((value, index) => {
-                                                    return (
-                                                        <MenuItem key={index} value={value}>
-                                                            {value}
-                                                        </MenuItem>
-                                                    )
-                                                })}
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div className='col-6'>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                name="Status"
-                                                value={Statusdropdown}
-                                                label="Status"
-                                                onChange={handleAddStatusSelect}
-                                            >
-                                                <MenuItem value="......"></MenuItem>
-                                                <MenuItem value="yes" >Y</MenuItem>
-                                                <MenuItem value="no">N</MenuItem>
+                                                <MenuItem value="......">------Select------</MenuItem>
+
                                             </Select>
                                         </FormControl>
                                     </div>
@@ -639,169 +381,49 @@ function FTPuserMaster() {
                 </div>
             </div>
             <div className="modal fade" id="EditMeetingmaster" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                    <form
-                        onSubmit={onHandelEditUserMaster}
-                    >
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Edit Meeting Master</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                <div className='row g-3'>
-                                    <div className='col-6'> <TextField id="outlined-basic" fullWidth label="UserID" variant="filled" autoComplete='off' name='userID' value={userId} InputProps={{ readOnly: true, }} /></div>
-                                    <div className='col-6'> <TextField id="outlined-basic" fullWidth label="User Name" variant="outlined" autoComplete='off' multiline ref={USER_NAME} defaultValue={userName}
-                                        name="User_Name" value={editInputes.User_Name} onChange={handleEditInputs}></TextField></div>
-                                    <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Email Id" variant="outlined" autoComplete='off' multiline ref={EMAIL_ID} defaultValue={emailID}
-                                        name="Email_ID" value={editInputes.Email_ID} onChange={handleEditInputs}></TextField></div>
-                                    <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Mobile No" variant="outlined" autoComplete='off' multiline ref={MOBILE_NO} defaultValue={mobileNO}
-                                        name="Mobile_No" value={editInputes.Mobile_No} onChange={handleEditInputs}></TextField></div>
-                                    <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Employee No" variant="filled" autoComplete='off' multiline ref={EMPLOYEE_NO} defaultValue={EmployeeNo} InputProps={{ readOnly: true, }} /></div>
-                                    <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Valid Upto" variant="outlined" autoComplete='off' multiline ref={VALID_UPTO} defaultValue={ValidUpto}
-                                        name="Valid_Upto" value={editInputes.Valid_Upto} onChange={handleEditInputs}></TextField></div>
-
-                                    <div className='col-6'>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                name="Role"
-                                                value={Roledropdown}
-                                                label="Role"
-                                                onChange={handleAddRoleSelect}
-                                            >
-                                                {RoleList.map((value, index) => {
-                                                    return (
-                                                        <MenuItem key={index} value={value}>
-                                                            {value}
-                                                        </MenuItem>
-                                                    )
-                                                })}
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    {/* <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Group Access" variant="filled" autoComplete='off' multiline ref={GROUP_ACCESS} defaultValue={editDetails.Group_Access} InputProps={{ readOnly: true, }} /></div> */}
-                                    <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Group Access" variant="outlined" autoComplete='off' multiline ref={GROUP_ACCESS} defaultValue={GroupAccess}
-                                        name="Group_Access" value={editInputes.Group_Access} onChange={handleEditInputs}></TextField></div>
-                                    <div className='col-6'>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label"> Disable Flag</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                name="Disable_flag"
-                                                value={Disable_Userdropdown}
-                                                label="Disable Flag"
-                                                onChange={handleAddStatusSelect}
-                                            >
-                                                <MenuItem value="......">------Select------</MenuItem>
-                                                <MenuItem value="yes">YES</MenuItem>
-                                                <MenuItem value="No">NO</MenuItem>
-
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div className='col-6'>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label"> Ldap Flag</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                name="Ldap_flag"
-                                                value={Ldapdropdown}
-                                                label="Ldap Flag"
-                                                onChange={handleAddStatusSelect}
-                                            >
-                                                <MenuItem value="......">------Select------</MenuItem>
-                                                <MenuItem value="yes">Y</MenuItem>
-                                                <MenuItem value="No">N</MenuItem>
-
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div className='col-6'>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label"> Branch</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                name="Branch"
-                                                value={Statusdropdown}
-                                                label="Branch"
-                                                onChange={handleAddStatusSelect}
-                                            >
-                                                {BranchList.map((value, index) => {
-                                                    return (
-                                                        <MenuItem key={index} value={value}>
-                                                            {value}
-                                                        </MenuItem>
-                                                    )
-                                                })}
-
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div className='col-6'>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">status</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                name="Status"
-                                                value={Statusdropdown}
-                                                label="Status"
-                                                onChange={handleAddStatusSelect}
-                                            >
-                                                <MenuItem value="......">------Select------</MenuItem>
-                                                <MenuItem value="Y">Y</MenuItem>
-                                                <MenuItem value="N">N</MenuItem>
-
-                                            </Select>
-                                        </FormControl>
+                    <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                        <form 
+                        // onSubmit={onHandelEditMeetingCenter}
+                        >
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Edit Meeting Master</h5>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div className="modal-body">
+                                    <div className='row g-3'>
+                                       <div className='col-6'>
+                                       
+                                            <FormControl fullWidth>
+                                                <InputLabel id="demo-simple-select-label">status</InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    name="STATUS"
+                                                    // value={Statusdropdown}
+                                                    label="Status"
+                                                    // onChange={handleAddStatusSelect}
+                                                >
+                                                    <MenuItem value="......">------Select------</MenuItem>
+                                                    {/* {statusListArray.map((Statusdropdown, Index) =>
+                                                        <MenuItem key={Index} value={Statusdropdown}>{Statusdropdown}</MenuItem>
+                                                    )}; */}
+                                                </Select>
+                                            </FormControl>
+                                            {/* 
+                                        <TextField id="outlined-textarea" label="Status" variant="outlined" autoComplete='off' multiline ref={STATUS} defaultValue={editDetails.status}
+                                            name="status" value={editInputes.status} onChange={handleEditInputs}></TextField> */}
+                                        </div>
                                     </div>
                                 </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn bg-orenge" data-bs-dismiss="modal">Close</button>
+                                    <button type="Submit" className="btn bg-orenge">Save</button>
+                                </div>
                             </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn bg-orenge" data-bs-dismiss="modal">Close</button>
-                                <button type="Submit" className="btn bg-orenge">Save</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div className="modal fade" id="ViewMeetingmaster" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">View Meeting Master</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <div className='row g-3'>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="UserID" value={userId} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="User Name" value={userName} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Email ID" value={emailID} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Mobile No" value={mobileNO} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Employee No" value={EmployeeNo} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Valid Upto" value={ValidUpto} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Role" value={Roledropdown} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Group Access" value={GroupAccess} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Disable Flag" value={Disable_Userdropdown} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Ldap Flag" value={Ldapdropdown} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Branch" value={Statusdropdown} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                                <div className='col-6'> <TextField id="outlined-basic" fullWidth label="Status" value={Statusdropdown} InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' /></div>
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save
-                            </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
-            </div>
         </>
 
     )

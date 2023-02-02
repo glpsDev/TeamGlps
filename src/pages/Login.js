@@ -20,6 +20,7 @@ function Login(props) {
 	const passref = useRef();
 	const Navigate = useNavigate()
 	const [loading, setLoading] = useState(false);
+
 	const [open, setOpen] = React.useState(false);
 
 	const handleClose = () => {
@@ -28,28 +29,33 @@ function Login(props) {
 		  }, 1000);
 	};
 
+
 	const handleToggle = () => {
 		setOpen(!open);
 	}
+
 	const handleChange = (event) => {
 		const name = event.target.name;
 		const value = event.target.value;
 		setInputs(values => ({ ...values, [name]: value }))
+		
 	}
 
-
 	const handleSubmit = (event) => {
+
 		event.preventDefault();
 		if (userref.current.value == "") {
 			alert("Please Enter User Name")
 			Navigate("/");
 			return;
 		}
+
 		if (passref.current.value == "") {
 			alert("Please Enter Password")
 			Navigate("/");
 			return;
 		}
+
 		handleToggle()
 
 		const requestOptions = {
@@ -60,10 +66,10 @@ function Login(props) {
 				"password": inputs.password
 			})
 		};
+
 		 fetch(Url+login, requestOptions)
 			.then(response => response.json())
 			.then((response) => {
-				console.log(response)
 				handleClose()				
 				if (response.errorMessage == 'Error') {
 					alert(response.message)
@@ -71,12 +77,13 @@ function Login(props) {
 				} else {
 					Navigate("/index", { state: response });
 					if (response.message) {
+					
 					  }
 					handleClose()
+					
 				}						
 			})
 	}
-	
 	return (
 		<>
 			<div className="hero-img  login-page">
@@ -95,7 +102,7 @@ function Login(props) {
 										</div>
 										<div className="div">
 											<input type="text" className="form-control" id="username" name="username"
-												autoComplete="off" maxLength="50" minlenght="1" placeholder="User Name" ref={userref} value={inputs.username}
+												autoComplete="off" maxLength="50" minlenght="1" placeholder="User Name" ref={userref} value={inputs.username || ""}
 												onChange={handleChange} />
 										</div>
 									</div>
@@ -105,7 +112,7 @@ function Login(props) {
 										</div>
 										<div className="div">
 											<input type="password" className="form-control" id="password"
-												name="password" autoComplete="off" maxLength="30" minlenght="8" placeholder="Password" ref={passref} value={inputs.password}
+												name="password" autoComplete="off" maxLength="30" minlenght="8" placeholder="Password" ref={passref} value={inputs.password || ""}
 												onChange={handleChange} />
 										</div>
 									</div>

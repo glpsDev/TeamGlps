@@ -1,9 +1,14 @@
+// import * as React from 'react'; 
 import MyTaskList from './MyTaskList';
 import React, { useEffect, useState } from 'react';
+// import {useLocation} from 'react-router-dom';
+
+// import { useState } from "react";
 import Header from './Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileLines } from '@fortawesome/free-solid-svg-icons';
 import MyTaskDetails from "./MyTaskDetails";
+// import React from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -32,7 +37,7 @@ const fetchMyTasks = "/fetchMyTasks"
 const columns = [
     { id: 'Product_Code', label: 'Product Code' },
     { id: 'Appliction_No', label: 'Application No' },
-    { id: 'No_of_Customer', label: 'No of Customer' },
+    { id: 'No_of_Customer', label: 'No. of Customers' },
     { id: 'Application_Status', label: 'Application Status' },
     { id: 'Sanctioned_Date', label: 'Sanctioned Date' },
     { id: 'Last_Modified_By', label: 'Last Modified By' },

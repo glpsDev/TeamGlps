@@ -7,11 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { fetchUrl } from '../Config';
 
-
-const baseURL = fetchUrl;
-const applicationDetailsUrl = '/applicationDetails';
 
 const columns = [
   { id: 'Product_Code', label: 'Product Code', },
@@ -36,7 +32,7 @@ export default function MyTaskDetails(props) {
         "f1":F1
       }),
     };
-    fetch(baseURL + applicationDetailsUrl, requestApplicationDetails)
+    fetch('http://192.168.0.196:8090/applicationDetails', requestApplicationDetails)
       .then(response => response.json())
       .then((response) => {
         setApplicationDetails(response);
@@ -44,7 +40,7 @@ export default function MyTaskDetails(props) {
       .catch(error => {
         console.error(error);
       });
-  }, applicationDetails[0]);
+  }, applicationDetails[F1]);
 
 
   return (

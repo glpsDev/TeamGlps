@@ -82,8 +82,12 @@ const headCells = [
     label: 'Application Category',
   },
   {
+    id: 'Application_Category',
+    label: 'Application No',
+  },
+  {
     id: 'No_Of_Customer',
-    label: 'No Of Customer',
+    label: 'No. of Customers',
   },
   {
     id: 'Application_Status',
@@ -182,6 +186,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
+
         </Typography>
       )}
 
@@ -309,7 +314,7 @@ export default function Assigntask(props) {
     fetch(BaseUrl + fetchUnallocatedTasks, requestOptions)
       .then(response => response.json())
       .then((response) => {
-   
+        // console.log(response)
         setPostId(response.data);
         setTableData(response.data);
         handleClose()
@@ -339,7 +344,7 @@ export default function Assigntask(props) {
     fetch(BaseUrl + claimTask, requestOptionsassign)
       .then(response => response.json())
       .then((response) => {
-        setSelected([]);
+        setSelected([]); 
         handleChangeform(event);
         alert(response.errorMsg);
         setuserallocation("")
@@ -363,7 +368,9 @@ export default function Assigntask(props) {
       .then((response) => {
         setuserdata(response)
         handleClose()
+
       })
+
   }, []);
 
   const result = Object.values(userdata);
@@ -417,7 +424,7 @@ export default function Assigntask(props) {
       <div className='assignTask'>
         <div className='searchBox mt-4'>
           <div className="card">
-            <div className="card-header"> Search </div>
+            <div className="card-header"> Assign Task </div>
             <div className="card-body ">
               <form className='d-flex' onSubmit={handleChangeform}>
               <div className='col-9'>
@@ -431,10 +438,10 @@ export default function Assigntask(props) {
                     onChange={handleChangeoption}
                   >
                     <MenuItem value="">----Select All------</MenuItem>
-                    <MenuItem value="M110">Expection Queue for CB</MenuItem>
-                    <MenuItem value="M810">Expection Queue for AML</MenuItem>
-                    <MenuItem value="M710">Expection Queue for Dedupe</MenuItem>
-                    <MenuItem value="M910">Expection Queue for Distance Check</MenuItem>
+                    <MenuItem value="M110">Exception Queue for CB</MenuItem>
+                    <MenuItem value="M810">Exception Queue for AML</MenuItem>
+                    <MenuItem value="M710">Exception Queue for Dedupe</MenuItem>
+                    <MenuItem value="M910">Exception Queue for Distance Check</MenuItem>
                     <MenuItem value="M1010">Lead Data Approval</MenuItem>
                     <MenuItem value="M1015">Send Back Branch </MenuItem>
                   </Select>
@@ -511,6 +518,7 @@ export default function Assigntask(props) {
                               {row.f3}
                             </TableCell>
                             <TableCell>{row.f1}</TableCell>
+                            <TableCell>{row.f4}</TableCell>
                             <TableCell>{row.f12}</TableCell>
                             <TableCell>{row.f11}</TableCell>
                             <TableCell>{row.f2}</TableCell>
@@ -543,6 +551,7 @@ export default function Assigntask(props) {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
               <>
+
                 <div className='d-flex justify-content-end p-3' >
                   <FormControl sx={{ width: '20%' }} >
                     <InputLabel >Assign To</InputLabel>
@@ -561,8 +570,8 @@ export default function Assigntask(props) {
 
                     </Select>
                   </FormControl>
-                  <div className=' d-flex p-1  '>
-                <Button type="submit"  className='bg-orenge ms-3 ' variant="contained" disabled={selected.length > 0 ? false : true}>Update</Button>
+                  <div className=' d-flex p-1 update-btn '>
+                <Button type="submit"  className='ms-3 ' variant="contained" disabled={selected.length > 0 ? false : true}>Update</Button>
                 </div>
                   {/* <Button type="submit"
                     className='bg-orenge ms-3'
@@ -573,7 +582,7 @@ export default function Assigntask(props) {
                     Cancel
                   </Button> */}
                   <div className=' d-flex p-1  '>
-                <Button type="submit"  className='bg-orenge ms-3 ' variant="contained" onClick={onhandlecancel}>Cancel</Button>
+                <Button type="submit"  className='bg-orenge ms-2 ' variant="contained" onClick={onhandlecancel}>Cancel</Button>
                 </div>
                 </div>
               </>

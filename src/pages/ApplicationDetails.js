@@ -89,7 +89,7 @@ const Historycolumns = [
   { id: 'Remark', label: 'Remark', },
 ];
 const columns = [
-  { id: 'Sr', label: 'Sr', },
+  { id: 'Sr', label: 'Sr No.', },
   { id: 'Task_Namr', label: 'Task Name', },
   { id: 'Start Time', label: 'Start Time', },
   { id: 'End_Time', label: 'End Time', },
@@ -140,6 +140,7 @@ function ApplicationDetails(props) {
   }
 
   React.useEffect(() => {
+
     const data = localStorage.getItem("key");
     if (data != null) {
       setBatchdata(JSON.parse(data));
@@ -193,8 +194,10 @@ function ApplicationDetails(props) {
     fetch(BaseURL + fetchLeadLvlDtl, requestleadRecords)
       .then(response => response.json())
       .then((response) => {
+        // console.log(response)
         setLeadRecord(response)
         setHistoryData(response.auditTrail)
+        // console.log(response.auditTrail)
         handleClose()
 
       })
@@ -216,7 +219,7 @@ function ApplicationDetails(props) {
     handleToggle()
     e.preventDefault();
 
-    setdisabled(true)
+   
     const requestleadRecords = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -229,6 +232,7 @@ function ApplicationDetails(props) {
     fetch(BaseURL + completeTask, requestleadRecords)
       .then(response => response.json())
       .then((response) => {
+        // console.log(response)
         handleClose()
       })
   }
@@ -413,7 +417,7 @@ function ApplicationDetails(props) {
                         >
                           <MenuItem disabled={true} value={0}>--Select--</MenuItem>
                           <MenuItem value={1}>Proceed Further</MenuItem>
-                          <MenuItem value={2}>Re-hit</MenuItem>
+                          <MenuItem value={2}>Send back to Branch</MenuItem>
                           <MenuItem value={9}>Reject</MenuItem>
                         </Select>
                       </FormControl>
@@ -480,7 +484,7 @@ function ApplicationDetails(props) {
                     <TextField id="outlined-basic" label="Pincode" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.pincode} fullWidth />
                   </div>
                   <div className='col-6'>
-                    <TextField id="outlined-basic" label="Loaan Amount" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.disbursementAmount} fullWidth />
+                    <TextField id="outlined-basic" label="Loan Amount" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.disbursementAmount} fullWidth />
                   </div>
                   <div className='col-6'>
                     <TextField id="outlined-basic" label="City" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.city} fullWidth />
@@ -547,7 +551,7 @@ function ApplicationDetails(props) {
                     <TextField id="outlined-basic" label="Present Address" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.presentAddress} fullWidth />
                   </div>
                   <div className='col-6'>
-                    <TextField id="outlined-basic" label="Jana Refencs Id" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.janaIdBorrower} fullWidth />
+                    <TextField id="outlined-basic" label="Jana Reference id" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.janaIdBorrower} fullWidth />
                   </div>
                   <div className='col-6'>
                     <FormControl fullWidth disabled={disabledAmlSelectBox ? false : true} >
@@ -624,7 +628,7 @@ function ApplicationDetails(props) {
                     <TextField id="outlined-basic" label="Mobile No" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.mobileNo} fullWidth />
                   </div>
                   <div className='col-6'>
-                    <TextField id="outlined-basic" label="Jana Refencs Id" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.janaIdBorrower} fullWidth />
+                    <TextField id="outlined-basic" label="Jana Reference id" InputProps={{ readOnly: true, }} variant="filled" autoComplete='off' multiline defaultValue={leadRecord.janaIdBorrower} fullWidth />
                   </div>
                   <div className='col-6'>
                     <FormControl fullWidth disabled={disabledAmlSelectBox ? false : true} >

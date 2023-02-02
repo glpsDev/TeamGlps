@@ -460,10 +460,6 @@ hr {
 .accordion-button{
   font-size: 20px !important;
 }
-
-.accordion-button .background-image{
-  color: white !important;
-}
 .subMenu2{
   width: 200px;
   background-color: #da610a;
@@ -779,4 +775,11 @@ hr {
   --bs-accordion-body-padding-y: 1rem;
   --bs-accordion-active-color: #ffffff !important;
   --bs-accordion-active-bg: #d8107c !important;
+}
+
+ .update-btn .MuiButton-containedPrimary {
+  background-color: #eb7723 !important;
+}
+ .update-btn .Mui-disabled {
+  background-color: #eb772385 !important;
 }

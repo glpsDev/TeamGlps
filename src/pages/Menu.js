@@ -11,7 +11,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import Groups2Icon from '@mui/icons-material/Groups2';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
 
 
 function Mymenu(props) {
@@ -59,38 +58,38 @@ function Mymenu(props) {
         }
     });
 
+    const Icon = (category) => {
+        if (category == "Operation Tray")
+            return (
+                <>
+                    <HomeRepairServiceIcon className='me-3'></HomeRepairServiceIcon>
+                </>
+            );
 
-    const Icon = ({ category }) => {
-        if (category === 'Operation Tray') {
-          return (
-            <HomeRepairServiceIcon className="me-3" />
-          );
-        }
-      
-        if (category === 'Meeting Center') {
-          return (
-            <Groups2Icon className="me-3" />
-          );
-        }
-      
-        if (category === 'Reports') {
-          return (
-            <InsertDriveFileIcon className="me-3" />
-          );
-        }
-      
-        if (category === 'User Master') {
-          return (
-            <AccountCircleIcon className="me-3" />
-          );
-        }
-      
-        return (
-          <AcUnitIcon className="me-3" />
-        );
-      };
-      
-      
+        if (category == "Meeting Center")
+            return (
+                <>
+                    <Groups2Icon className='me-3'></Groups2Icon>
+                </>
+            );
+
+        if (category == "Reports")
+            return (
+                <>
+                    <InsertDriveFileIcon className='me-3'></InsertDriveFileIcon>
+                </>
+            );
+
+        if (category == "User Master")
+            return (
+                <>
+                    <AccountCircleIcon className='me-3'></AccountCircleIcon>
+                </>
+
+            )
+    }
+
+  
     return (
         <>
             <Header userdata={mainmenuList} />

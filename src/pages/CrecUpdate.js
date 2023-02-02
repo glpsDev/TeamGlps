@@ -270,12 +270,15 @@ function CrecUpdate() {
                     alert("No Meeting Center is Available for Update")
                 }
                 handleClose()
+
+                
             })
     }
 
 
     const queueList = Object.keys(searchCrec);
     const queueValue = Object.values(searchCrec);
+
 
     const onHandleCrecBulkUpdate = async (event) => {
         handleToggle()
